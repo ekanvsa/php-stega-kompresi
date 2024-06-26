@@ -76,7 +76,7 @@
         var file = fileInput.files[0]; // Ambil file dari input
         var fileSize = file.size;
         var fileType = file.type;
-        console.log(file);
+
         if (fileType !== 'image/png') {
             document.getElementById('imageError').innerHTML = 'Hanya file PNG yang diperbolehkan.';
             return;
@@ -103,8 +103,6 @@
                 var formData = new FormData();
                 formData.append('image', compressedFile);
 
-                console.log(compressedFile)
-                console.log(formData)
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', 'compress_process.php', true);
 

@@ -71,7 +71,13 @@ function writeCompressedData($encodedData, $outputFile) {
     fclose($fp);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name'])) {
+function compressImage($inputFile, $outputFile) {
+    $data = file_get_contents($inputFile);
+    $encodedData = huffmanCompress($data);
+    writeCompressedData($encodedData, $outputFile);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image'])) {
     header('Content-Type: application/json');
     $targetDir = "uploads/";
     if (!is_dir($targetDir)) {
@@ -79,10 +85,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name']))
     }
     $targetFile = $targetDir . basename($_FILES["image"]["name"]);
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-    if ($imageFileType != "png") {
-        echo json_encode(["status" => "error", "message" => "Hanya file PNG yang diperbolehkan."]);
-        exit;
-    }
+    // if ($imageFileType != "png") {
+    //     echo json_encode(["status" => "error", "message" => "Hanya file PNG yang diperbolehkan."]);
+    //     exit;
+    // }
     if ($_FILES["image"]["size"] > 500000) {
         echo json_encode(["status" => "error", "message" => "Maaf, ukuran gambar terlalu besar."]);
         exit;
@@ -97,11 +103,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name']))
     } else {
         echo json_encode(["status" => "error", "message" => "Maaf, terjadi kesalahan saat mengunggah gambar."]);
     }
-}
-
-function compressImage($inputFile, $outputFile) {
-    $data = file_get_contents($inputFile);
-    $encodedData = huffmanCompress($data);
-    writeCompressedData($encodedData, $outputFile);
 }
 ?>
