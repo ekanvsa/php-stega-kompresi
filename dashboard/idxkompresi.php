@@ -80,7 +80,7 @@
                 return;
             }
 
-            if (fileSize > 5000000) { // Adjusted for larger PNG files if needed
+            if (fileSize > 5000000) { // 5 MB, sesuaikan dengan kebutuhan
                 document.getElementById('imageError').innerHTML = 'Ukuran gambar terlalu besar.';
                 return;
             }
@@ -89,7 +89,7 @@
                 maxSizeMB: 1,
                 maxWidthOrHeight: 800,
                 useWebWorker: true,
-                fileType: 'image/png' // Set the output file type to PNG
+                fileType: 'image/png'
             };
 
             new ImageCompressor(file, {

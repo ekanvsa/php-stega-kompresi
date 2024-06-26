@@ -71,12 +71,6 @@ function writeCompressedData($encodedData, $outputFile) {
     fclose($fp);
 }
 
-function compressImage($inputFile, $outputFile) {
-    $data = file_get_contents($inputFile);
-    $encodedData = huffmanCompress($data);
-    writeCompressedData($encodedData, $outputFile);
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name'])) {
     header('Content-Type: application/json');
     $targetDir = "uploads/";
@@ -103,5 +97,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name']))
     } else {
         echo json_encode(["status" => "error", "message" => "Maaf, terjadi kesalahan saat mengunggah gambar."]);
     }
+}
+
+function compressImage($inputFile, $outputFile) {
+    $data = file_get_contents($inputFile);
+    $encodedData = huffmanCompress($data);
+    writeCompressedData($encodedData, $outputFile);
 }
 ?>

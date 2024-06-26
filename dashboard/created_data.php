@@ -88,14 +88,15 @@ function embedLSB($imagePath, $message) {
     imagepng($image, $outputImagePath);
     imagedestroy($image);
 
-    // Mengirimkan respons sukses dalam format JSON
+    // Mengembalikan path gambar yang telah disisipkan pesan
     return ["status" => "success", "imagePath" => $outputImagePath];
 }
 
 // Mengecek apakah form telah dikirim
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name'])) {
     $tempName = $_FILES['image']['tmp_name'];
-    $imagePath = 'uploads/' . basename($_FILES['image']['name']);
+    $filename = $_FILES['image']['name'];
+    $imagePath = 'uploads/' . basename($filename);
     // Memindahkan file gambar yang diupload ke direktori 'uploads'
     move_uploaded_file($tempName, $imagePath);
 
@@ -113,11 +114,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name']))
         $stmt->bind_param("si", $message, $length);
 
         if ($stmt->execute()) {
-            echo json_encode([
-                "status" => "success",
-                "message" => "Berhasil input message dan gambar sudah diencode.",
-                "imagePath" => $embedResult['imagePath']
-            ]);
+            // Dapatkan messageId yang baru saja di-generate
+            $messageId = mysqli_insert_id($conn);
+
+            // Simpan nama file gambar dan messageId ke dalam tabel image
+            $stmt2 = $conn->prepare("INSERT INTO image (fileName, messageId) VALUES (?, ?)");
+            if ($stmt2 === false) {
+                die("Error: " . $conn->error);
+            }
+            $stmt2->bind_param("si", $filename, $messageId);
+
+            if ($stmt2->execute()) {
+                echo json_encode([
+                    "status" => "success",
+                    "message" => "Berhasil input message dan gambar sudah diencode.",
+                    "imagePath" => $embedResult['imagePath']
+                ]);
+            } else {
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "Error: " . $stmt2->error
+                ]);
+            }
+
+            $stmt2->close();
         } else {
             echo json_encode([
                 "status" => "error",
