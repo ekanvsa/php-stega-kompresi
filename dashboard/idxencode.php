@@ -45,6 +45,22 @@
       background-color: #0056b3;
       border-color: #0056b3;
     }
+
+    .step-container {
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .step {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -65,96 +81,59 @@
         </div>
         <button type="submit" class="btn btn-primary">Encode</button>
       </form>
-      <div id="progressContainer" class="mt-3" style="display: none;">
-        <h3>Progress Embedding:</h3>
-        <div class="progress">
-          <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
-            aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <div id="progressStatus" class="mt-2"></div>
-      </div>
-    </div>
-    <div id="stepByStep" class="mt-3" style="display: none;">
-      <h3>Langkah-langkah:</h3>
-      <ul id="stepsList"></ul>
-    </div>
-    <div class="mt-3 text-center">
-      <a href="index.html" class="btn btn-secondary">Kembali</a>
+      <div id="result" class="mt-3"></div>
+      <div id="steps" class="step-container"></div>
     </div>
   </div>
 
   <script>
     $(document).ready(function () {
-  $("#encodeForm").on("submit", function (event) {
-    event.preventDefault();
-    var formData = new FormData(this);
+      $('#encodeForm').on('submit', function (e) {
+        e.preventDefault();
 
-    // Tampilkan container untuk langkah-langkah
-    $("#stepByStep").show();
+        let formData = new FormData(this);
 
-    $("#progressContainer").show();
-    $("#progressStatus").text("Memulai proses embedding...");
-
-    $.ajax({
-      url: "created_data.php",
-      type: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
-      xhr: function () {
-        var xhr = new window.XMLHttpRequest();
-        xhr.addEventListener("readystatechange", function () {
-          if (xhr.readyState == 3) { // State loading (partial data)
-            var response = xhr.responseText.trim();
-            var responses = response.split('\n');
-            var lastResponse = responses[responses.length - 1];
-
-            try {
-              var jsonResponse = JSON.parse(lastResponse);
-              if (jsonResponse.status === "step") {
-                var detail = jsonResponse.detail;
-
-                // Update progress bar
-                $("#progressBar").width((detail.step / formData.get('message').length * 100) + "%");
-                $("#progressBar").attr("aria-valuenow", detail.step);
-
-                // Append step details to steps list
-                $("#stepsList").append(`<li>Embedding bit ${detail.bit} at pixel (${detail.x}, ${detail.y})<br>
-                                        Red: ${detail.r}, Green: ${detail.g}, Blue: ${detail.b}<br>
-                                        Step: ${detail.step}</li>`);
-
-                // Scroll ke bawah agar langkah-langkah terlihat
-                $("#stepsList").scrollTop($("#stepsList")[0].scrollHeight);
-              } else if (jsonResponse.status === "progress") {
-                // Update progress bar based on overall progress
-                $("#progressBar").width(jsonResponse.progress + "%");
-                $("#progressBar").attr("aria-valuenow", jsonResponse.progress);
-                $("#progressStatus").text("Proses embedding: " + Math.round(jsonResponse.progress) + "%");
-              }
-            } catch (e) {
-              console.log("Parsing error: ", e);
+        $.ajax({
+          url: $(this).attr('action'),
+          type: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            let res = JSON.parse(response);
+            if (res.status === 'success') {
+              $('#result').html(`
+                <div class="alert alert-success" role="alert">
+                  ${res.message}
+                  <br>
+                  <img src="${res.imagePath}" class="img-fluid mt-3" alt="Encoded Image">
+                  <br>
+                  <a href="${res.imagePath}" download="encoded_image.png" class="btn btn-success mt-3">Download Gambar</a>
+                </div>
+              `);
+              let stepsHTML = '';
+              res.steps.forEach((step, index) => {
+                stepsHTML += `
+                  <div class="step">
+                    <h5>Step ${index + 1}</h5>
+                    <p>Pixel (${step.pixel.x}, ${step.pixel.y})</p>
+                    <p>Colors: R: ${step.colors.red}, G: ${step.colors.green}, B: ${step.colors.blue}</p>
+                    <p>Binary message: ${step.binary_message}</p>
+                    <p>Index: ${step.index}</p>
+                  </div>
+                `;
+              });
+              $('#steps').html(stepsHTML);
+            } else {
+              $('#result').html(`<div class="alert alert-danger" role="alert">${res.message}</div>`);
             }
+          },
+          error: function () {
+            $('#result').html(`<div class="alert alert-danger" role="alert">Terjadi kesalahan. Silakan coba lagi.</div>`);
           }
-        }, false);
-
-        return xhr;
-      },
-      success: function (response) {
-        var res = JSON.parse(response);
-        if (res.status === "success") {
-          $("#progressBar").width("100%");
-          $("#progressBar").attr("aria-valuenow", 100);
-          $("#progressStatus").html("Embedding selesai! <a href='" + res.imagePath + "' download>Download gambar hasil embedding</a>");
-        } else {
-          $("#progressStatus").text("Error: " + res.message);
-        }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        $("#progressStatus").text("Request failed: " + textStatus + " - " + errorThrown);
-      }
+        });
+      });
     });
-  });
-});
   </script>
 </body>
 
