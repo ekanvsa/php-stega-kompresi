@@ -13,16 +13,23 @@
             font-family: 'Georgia', serif;
             background-color: #f4f4f4;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .form-container {
+        .container {
+            width: 100%;
+            max-width: 800px;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: #fff;
-            margin: 20px auto;
-            max-width: 600px;
             color: #333;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
         }
 
         .form-label {
@@ -52,16 +59,47 @@
 
         .decoded-image {
             margin-top: 20px;
+            max-width: 100%;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-container {
+            max-height: 300px; /* Atur tinggi maksimum untuk konten yang dapat di-scroll */
+            overflow-y: auto; /* Aktifkan scroll vertikal jika konten melebihi tinggi maksimum */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .step {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .result-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .result-image {
             max-width: 400px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <h1 class="mb-4 text-center">Decode Gambar</h1>
         <div class="form-container">
-            <h1 class="mb-4">Decode Gambar</h1>
-            <form action="" method="post" enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data" id="decodeForm">
                 <div class="mb-3">
                     <label for="image" class="form-label">Pilih Gambar:</label>
                     <input type="file" class="form-control" id="image" name="image" accept=".png" required>
@@ -69,78 +107,87 @@
                 <button type="submit" class="btn btn-primary" name="submit">Decode</button>
             </form>
         </div>
-        <div class="mt-3 text-center">
-            <?php
-            // Fungsi untuk mengekstrak LSB dari file gambar JPG
-            function extractLSB($imagePath)
-            {
-                $image = imagecreatefrompng($imagePath);
 
-                if (!$image) {
-                    die("Gagal membuka gambar.");
-                }
+        <?php
+        // Fungsi untuk mengekstrak LSB dari file gambar PNG
+        function extractLSB($imagePath)
+        {
+            $image = imagecreatefrompng($imagePath);
 
-                $width = imagesx($image);
-                $height = imagesy($image);
-                $messageBinary = '';
-                $decodedMessage = '';
+            if (!$image) {
+                die("Gagal membuka gambar.");
+            }
 
-                for ($y = 0; $y < $height; $y++) {
-                    for ($x = 0; $x < $width; $x++) {
-                        $rgb = imagecolorat($image, $x, $y);
-                        $colors = imagecolorsforindex($image, $rgb);
+            $width = imagesx($image);
+            $height = imagesy($image);
+            $messageBinary = '';
+            $decodedMessage = '';
 
-                        // Ambil bit terakhir dari warna biru
-                        $messageBinary .= $colors['blue'] & 1;
+            echo "<div class='step-container'>";
 
-                        // Setiap 8 bit, konversi ke karakter
-                        if (strlen($messageBinary) == 8) {
-                            $decodedMessage .= chr(bindec($messageBinary));
+            for ($y = 0; $y < $height; $y++) {
+                for ($x = 0; $x < $width; $x++) {
+                    $rgb = imagecolorat($image, $x, $y);
+                    $colors = imagecolorsforindex($image, $rgb);
 
-                            // Jika karakter null terminator ditemukan, hentikan proses decoding
-                            if (substr($decodedMessage, -1) === chr(0)) {
-                                $decodedMessage = substr($decodedMessage, 0, -1);
-                                imagedestroy($image);
-                                return $decodedMessage;
-                            }
+                    // Ambil bit terakhir dari warna biru
+                    $bitValue = $colors['blue'] & 1;
+                    $messageBinary .= $bitValue;
 
-                            // Reset binary string
-                            $messageBinary = '';
+                    // Tampilkan detail setiap langkah
+                    echo "<div class='step'>";
+                    echo "<p>Posisi Piksel: ($x, $y)</p>";
+                    echo "<p>Nilai Biner Sebelum Ekstraksi: " . str_pad($messageBinary, 8, '0', STR_PAD_LEFT) . "</p>";
+
+                    // Setiap 8 bit, konversi ke karakter
+                    if (strlen($messageBinary) == 8) {
+                        $decodedChar = chr(bindec($messageBinary));
+                        $decodedMessage .= $decodedChar;
+
+                        // Jika karakter null terminator ditemukan, hentikan proses decoding
+                        if ($decodedChar === chr(0)) {
+                            $decodedMessage = substr($decodedMessage, 0, -1);
+                            imagedestroy($image);
+                            echo "<p class='text-success mt-3'>Pesan berhasil diekstrak: " . htmlspecialchars($decodedMessage) . "</p>";
+                            echo "</div>"; // tutup step
+                            echo "</div>"; // tutup step-container
+                            return $decodedMessage;
                         }
+
+                        // Tampilkan karakter yang diekstrak
+                        echo "<p>Karakter yang Diekstrak: $decodedChar</p>";
+
+                        // Reset binary string
+                        $messageBinary = '';
                     }
-                }
 
-                imagedestroy($image);
-                return $decodedMessage;
-            }
-
-            // Proses ekstraksi LSB jika form disubmit
-            if (isset($_POST['submit'])) {
-                $imageFile = $_FILES['image']['tmp_name'];
-                if ($imageFile && is_uploaded_file($imageFile)) {
-                    $extractedText = extractLSB($imageFile);
-
-                    // Menampilkan hasil ekstraksi
-                    echo "<h2 class='mt-4'>Hasil Decode Pesan Rahasia:</h2>";
-                    echo "<p class='decoded-message'>" . $extractedText . "</p>";
-
-                    // Menampilkan gambar yang telah diekstrak LSB-nya
-                    echo "<div class='mt-4'>";
-                    echo "<h2>Gambar yang telah diekstrak LSB-nya:</h2>";
-                    echo "<img src='data:image/jpeg;base64," . base64_encode(file_get_contents($imageFile)) . "' alt='Decoded Image' class='decoded-image'>";
-                    echo "</div>";
-
-                    // Menampilkan link untuk mengunduh gambar
-                    $imageName = basename($_FILES['image']['name']);
-                    echo "<div class='mt-3'>";
-                    echo "<a href='download.php?image=" . urlencode($imageName) . "' class='btn btn-primary'>Download Gambar</a>";
-                    echo "</div>";
-                } else {
-                    echo "<p class='text-danger'>Gagal mengunggah gambar.</p>";
+                    echo "</div>"; // tutup step
                 }
             }
-            ?>
-        </div>
+
+            echo "</div>"; // tutup step-container
+            imagedestroy($image);
+            return $decodedMessage;
+        }
+
+        // Proses ekstraksi LSB jika form disubmit
+        if (isset($_POST['submit'])) {
+            $imageFile = $_FILES['image']['tmp_name'];
+            if ($imageFile && is_uploaded_file($imageFile)) {
+                // Lakukan proses decode
+                $extractedText = extractLSB($imageFile);
+
+                // Menampilkan gambar yang telah diekstrak LSB-nya
+                echo "<div class='result-container mt-4'>";
+                echo "<h2>Gambar yang telah diekstrak LSB-nya:</h2>";
+                echo "<img src='data:image/png;base64," . base64_encode(file_get_contents($imageFile)) . "' alt='Decoded Image' class='result-image'>";
+                echo "</div>";
+            } else {
+                echo "<p class='text-danger mt-3'>Gagal mengunggah gambar.</p>";
+            }
+        }
+        ?>
+
         <div class="mt-3 text-center">
             <a href="index.html" class="btn btn-secondary">Kembali</a>
         </div>

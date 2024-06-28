@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -43,6 +43,9 @@
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@latest/dist/browser-image-compression.js"></script>
 </head>
 <body>
+    <?php
+    phpinfo();
+    ?>
     <div class="container">
         <div class="form-container">
             <h1 class="mb-4">Kompresi Gambar</h1>
@@ -68,86 +71,57 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/image-compressor.js/2.1.0/image-compressor.min.js"></script>
-    <script>$(document).ready(function () {
-    $("#imageForm").on("submit", function (event) {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    $('#imageForm').on('submit', function (event) {
         event.preventDefault();
-        var fileInput = document.getElementById('image');
-        var file = fileInput.files[0]; // Ambil file dari input
-        var fileSize = file.size;
-        var fileType = file.type;
-        console.log(file);
-        if (fileType !== 'image/png') {
-            document.getElementById('imageError').innerHTML = 'Hanya file PNG yang diperbolehkan.';
-            return;
-        }
-
-        if (fileSize > 5000000) {
-            document.getElementById('imageError').innerHTML = 'Ukuran gambar terlalu besar.';
-            return;
-        }
-
-        var options = {
-            maxSizeMB: 5,
-            maxWidthOrHeight: 800,
-            useWebWorker: true,
-            fileType: 'image/png'
-        };
-
-        $("#progressContainer").show();
-        $("#progressStatus").text("Memulai proses kompresi...");
-
-        // Perbaikan di sini: ganti fileInput menjadi file
-        imageCompression(file, options)
-            .then(function (compressedFile) {
-                var formData = new FormData();
-                formData.append('image', compressedFile);
-
-                console.log(compressedFile)
-                console.log(formData)
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'compress_process.php', true);
-
-                xhr.upload.onprogress = function (event) {
-                    if (event.lengthComputable) {
-                        var percentComplete = Math.round((event.loaded / event.total) * 100);
-                        $("#progressBar").width(percentComplete + "%");
-                        $("#progressBar").attr("aria-valuenow", percentComplete);
-                        $("#progressStatus").text("Proses kompresi: " + percentComplete + "%");
+        
+        var formData = new FormData(this);
+        console.log(formData)
+        $.ajax({
+            url: 'compress_process.php', // Ganti dengan path yang sesuai
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener('progress', function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total * 100;
+                        $('#progressBar').css('width', percentComplete + '%');
+                        $('#progressBar').attr('aria-valuenow', percentComplete);
+                        $('#progressStatus').text(Math.round(percentComplete) + '% selesai');
                     }
-                };
-
-                xhr.onload = function () {
-                    console.log(xhr.status)
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        console.log(response);
-                        if (response.status === 'success') {
-                            var downloadLink = document.getElementById('downloadLink');
-                            downloadLink.href = response.downloadLink;
-                            downloadLink.style.display = 'block';
-                            $("#progressBar").width("100%");
-                            $("#progressBar").attr("aria-valuenow", 100);
-                            $("#progressStatus").text("Kompresi selesai!");
-                        } else {
-                            console.error('Error:', response);
-                            $("#progressStatus").text('Terjadi kesalahan saat mengunggah gambar.');
-                        }
-                    } else {
-                        console.error('Terjadi kesalahan saat mengunggah gambar.');
-                        $("#progressStatus").text('Terjadi kesalahan saat mengunggah gambar.');
-                    }
-                };
-                xhr.send(formData);
-            })
-            .catch(function (error) {
-                console.error(error.message);
-                $("#progressStatus").text('Terjadi kesalahan: ' + error.message);
-            });
+                }, false);
+                return xhr;
+            },
+            beforeSend: function () {
+                $('#progressContainer').show();
+                $('#progressBar').css('width', '0%');
+                $('#progressBar').attr('aria-valuenow', 0);
+                $('#progressStatus').text('');
+                $('#imageError').text('');
+            },
+            success: function (response) {
+                $('#progressContainer').hide();
+                if (response.status === 'success') {
+                    $('#downloadLink').attr('href', response.downloadLink);
+                    $('#downloadLink').show();
+                } else {
+                    $('#imageError').text(response.message);
+                }
+            },
+            error: function () {
+                $('#progressContainer').hide();
+                $('#imageError').text('Terjadi kesalahan saat mengunggah gambar.');
+            }
+        });
     });
 });
+</script>
 
-    </script>
 </body>
 
-</html>
+</html> -->

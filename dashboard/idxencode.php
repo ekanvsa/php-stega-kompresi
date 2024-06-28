@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Encode Gambar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <style>
     body {
       margin: 0;
@@ -59,17 +60,23 @@
         </div>
         <div class="mb-3">
           <label for="message" class="form-label">Pesan Rahasia:</label>
-          <input type="text" class="form-control" id="message" name="message" placeholder="Masukkan pesan rahasia" required>
+          <input type="text" class="form-control" id="message" name="message" placeholder="Masukkan pesan rahasia"
+            required>
         </div>
         <button type="submit" class="btn btn-primary">Encode</button>
       </form>
       <div id="progressContainer" class="mt-3" style="display: none;">
         <h3>Progress Embedding:</h3>
         <div class="progress">
-          <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+            aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="progressStatus" class="mt-2"></div>
       </div>
+    </div>
+    <div id="stepByStep" class="mt-3" style="display: none;">
+      <h3>Langkah-langkah:</h3>
+      <ul id="stepsList"></ul>
     </div>
     <div class="mt-3 text-center">
       <a href="index.html" class="btn btn-secondary">Kembali</a>
@@ -77,68 +84,77 @@
   </div>
 
   <script>
-    $(document).ready(function() {
-      $("#encodeForm").on("submit", function(event) {
-        event.preventDefault();
-        var formData = new FormData(this);//Mengambil file dari input file
-        $("#progressContainer").show();//Animasi proges
-        $("#progressStatus").text("Memulai proses embedding...");//Message proses
+    $(document).ready(function () {
+  $("#encodeForm").on("submit", function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
 
-        $.ajax({
-          url: "created_data.php",
-          type: "POST",
-          data: formData,
-          processData: false,
-          contentType: false,
-          xhr: function() {
-            var xhr = new window.XMLHttpRequest();
+    // Tampilkan container untuk langkah-langkah
+    $("#stepByStep").show();
 
-            xhr.addEventListener("readystatechange", function() {
-              if (xhr.readyState == 3) { // Loading state (partial data)
-                var response = xhr.responseText.trim();
-                var responses = response.split('\n');
-                var lastResponse = responses[responses.length - 1];
+    $("#progressContainer").show();
+    $("#progressStatus").text("Memulai proses embedding...");
 
-                try {
-                  var jsonResponse = JSON.parse(lastResponse);
-                  if (jsonResponse.status === "step") {
-                    var detail = jsonResponse.detail;
-                    $("#progressBar").width((detail.step / formData.get('message').length * 100) + "%");//Menggabungkan file gambar dengan message
-                    $("#progressBar").attr("aria-valuenow", detail.step);
-                    $("#progressStatus").html //Mengambil bit dari data png Mengambil panjang dan lebar gambar
-                    (`                      Embedding bit ${detail.bit} at pixel (${detail.x}, ${detail.y})<br>
-                                            Red: ${detail.r}, Green: ${detail.g}, Blue: ${detail.b}<br>
-                                            Step: ${detail.step}
-                                        `);
-                  } else if (jsonResponse.status === "progress") {
-                    $("#progressBar").width(jsonResponse.progress + "%");
-                    $("#progressBar").attr("aria-valuenow", jsonResponse.progress);
-                    $("#progressStatus").text("Proses embedding: " + Math.round(jsonResponse.progress) + "%");
-                  }
-                } catch (e) {
-                  console.log("Parsing error: ", e);
-                }
+    $.ajax({
+      url: "created_data.php",
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      xhr: function () {
+        var xhr = new window.XMLHttpRequest();
+        xhr.addEventListener("readystatechange", function () {
+          if (xhr.readyState == 3) { // State loading (partial data)
+            var response = xhr.responseText.trim();
+            var responses = response.split('\n');
+            var lastResponse = responses[responses.length - 1];
+
+            try {
+              var jsonResponse = JSON.parse(lastResponse);
+              if (jsonResponse.status === "step") {
+                var detail = jsonResponse.detail;
+
+                // Update progress bar
+                $("#progressBar").width((detail.step / formData.get('message').length * 100) + "%");
+                $("#progressBar").attr("aria-valuenow", detail.step);
+
+                // Append step details to steps list
+                $("#stepsList").append(`<li>Embedding bit ${detail.bit} at pixel (${detail.x}, ${detail.y})<br>
+                                        Red: ${detail.r}, Green: ${detail.g}, Blue: ${detail.b}<br>
+                                        Step: ${detail.step}</li>`);
+
+                // Scroll ke bawah agar langkah-langkah terlihat
+                $("#stepsList").scrollTop($("#stepsList")[0].scrollHeight);
+              } else if (jsonResponse.status === "progress") {
+                // Update progress bar based on overall progress
+                $("#progressBar").width(jsonResponse.progress + "%");
+                $("#progressBar").attr("aria-valuenow", jsonResponse.progress);
+                $("#progressStatus").text("Proses embedding: " + Math.round(jsonResponse.progress) + "%");
               }
-            }, false);
-
-            return xhr;
-          },
-          success: function(response) {
-            var res = JSON.parse(response);
-            if (res.status === "success") {
-              $("#progressBar").width("100%");
-              $("#progressBar").attr("aria-valuenow", 100);
-              $("#progressStatus").html("Embedding selesai! <a href='" + res.imagePath + "' download>Download gambar hasil embedding</a>");
-            } else {
-              $("#progressStatus").text("Error: " + res.message);
+            } catch (e) {
+              console.log("Parsing error: ", e);
             }
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            $("#progressStatus").text("Request failed: " + textStatus + " - " + errorThrown);
           }
-        });
-      });
+        }, false);
+
+        return xhr;
+      },
+      success: function (response) {
+        var res = JSON.parse(response);
+        if (res.status === "success") {
+          $("#progressBar").width("100%");
+          $("#progressBar").attr("aria-valuenow", 100);
+          $("#progressStatus").html("Embedding selesai! <a href='" + res.imagePath + "' download>Download gambar hasil embedding</a>");
+        } else {
+          $("#progressStatus").text("Error: " + res.message);
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#progressStatus").text("Request failed: " + textStatus + " - " + errorThrown);
+      }
     });
+  });
+});
   </script>
 </body>
 
