@@ -5,8 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Encode Gambar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <style>
     body {
       margin: 0;
@@ -76,19 +75,22 @@
         </div>
         <div class="mb-3">
           <label for="message" class="form-label">Pesan Rahasia:</label>
-          <input type="text" class="form-control" id="message" name="message" placeholder="Masukkan pesan rahasia"
-            required>
+          <input type="text" class="form-control" id="message" name="message" placeholder="Masukkan pesan rahasia" required>
         </div>
         <button type="submit" class="btn btn-primary">Encode</button>
       </form>
       <div id="result" class="mt-3"></div>
       <div id="steps" class="step-container"></div>
+      <div class="mt-3 text-center">
+        <a href="index.html" class="btn btn-primary">Home</a>
+        <a href="idxdecode.php" class="btn btn-success">Decode</a>
+      </div>
     </div>
   </div>
 
   <script>
-    $(document).ready(function () {
-      $('#encodeForm').on('submit', function (e) {
+    $(document).ready(function() {
+      $('#encodeForm').on('submit', function(e) {
         e.preventDefault();
 
         let formData = new FormData(this);
@@ -99,7 +101,7 @@
           data: formData,
           contentType: false,
           processData: false,
-          success: function (response) {
+          success: function(response) {
             let res = JSON.parse(response);
             if (res.status === 'success') {
               $('#result').html(`
@@ -128,7 +130,7 @@
               $('#result').html(`<div class="alert alert-danger" role="alert">${res.message}</div>`);
             }
           },
-          error: function () {
+          error: function() {
             $('#result').html(`<div class="alert alert-danger" role="alert">Terjadi kesalahan. Silakan coba lagi.</div>`);
           }
         });

@@ -66,8 +66,10 @@
         }
 
         .step-container {
-            max-height: 300px; /* Atur tinggi maksimum untuk konten yang dapat di-scroll */
-            overflow-y: auto; /* Aktifkan scroll vertikal jika konten melebihi tinggi maksimum */
+            max-height: 300px;
+            /* Atur tinggi maksimum untuk konten yang dapat di-scroll */
+            overflow-y: auto;
+            /* Aktifkan scroll vertikal jika konten melebihi tinggi maksimum */
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -189,7 +191,8 @@
         ?>
 
         <div class="mt-3 text-center">
-            <a href="index.html" class="btn btn-secondary">Kembali</a>
+            <a href="index.html" class="btn btn-primary">Home</a>
+            <a href="idxencode.php" class="btn btn-success">Encode</a>
         </div>
     </div>
 
