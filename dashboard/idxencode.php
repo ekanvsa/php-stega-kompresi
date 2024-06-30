@@ -12,7 +12,7 @@
       padding: 0;
       font-family: 'Georgia', serif;
       background-color: #f4f4f4;
-      min-height: 100vh;
+      min-height: 100%;
     }
 
     .form-container {
@@ -46,12 +46,14 @@
     }
 
     .step-container {
+      max-width: 600px;
       max-height: 300px;
       overflow-y: auto;
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: 8px;
       margin-top: 20px;
+      margin-left: 20px;
     }
 
     .step {
@@ -60,12 +62,24 @@
       background-color: #f9f9f9;
       border-radius: 8px;
     }
+
+    .horizontal-layout {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .encoded-image {
+      max-width: 100px;
+      /* Set the max width for the encoded image */
+      height: auto;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-  <div class="container">
+  <div class="container horizontal-layout">
     <div class="form-container">
       <h1 class="mb-4">Encode Gambar</h1>
       <form id="encodeForm" enctype="multipart/form-data" method="post" action="created_data.php">
@@ -79,12 +93,14 @@
         </div>
         <button type="submit" class="btn btn-primary">Encode</button>
       </form>
-      <div id="result" class="mt-3"></div>
-      <div id="steps" class="step-container"></div>
       <div class="mt-3 text-center">
-        <a href="index.html" class="btn btn-primary">Home</a>
+        <a href="index.php" class="btn btn-primary">Home</a>
         <a href="idxdecode.php" class="btn btn-success">Decode</a>
       </div>
+    </div>
+    <div>
+      <div id="result" class="mt-3"></div>
+      <div id="steps" class="step-container"></div>
     </div>
   </div>
 
@@ -108,7 +124,7 @@
                 <div class="alert alert-success" role="alert">
                   ${res.message}
                   <br>
-                  <img src="${res.imagePath}" class="img-fluid mt-3" alt="Encoded Image">
+                  <img src="${res.imagePath}" class="img-fluid mt-3 encoded-image" alt="Encoded Image">
                   <br>
                   <a href="${res.imagePath}" download="encoded_image.png" class="btn btn-success mt-3">Download Gambar</a>
                 </div>
