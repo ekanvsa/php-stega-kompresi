@@ -107,7 +107,44 @@
 </head>
 
 <body>
-    
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Eka Novitasari</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="idxencode.php">Encode</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="idxdecode.php">Decode</a>
+          </li>
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="index.php" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+              Steganografi LSB
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="idxencode.php">Encode</a></li>
+              <li><a class="dropdown-item" href="idxdecode.php">Decode</a></li>
+            </ul>
+          </li> -->
+          <li class="nav-item ">
+            <a class="nav-link active" href="history.php">History</a>
+          </li>
+        </ul>
+          <form class="d-flex bg-primary">
+              <img class="img-profile rounded-circle" src="img/undraw_profile.svg"/>
+          </form>
+      </div>
+    </div>
+  </nav>
+<div class="container horizontal-layout">
+<div class="form-container">
         <h1 class="mb-4">Decode Gambar</h1>
         <div class="form-container">
             <form action="" method="post" enctype="multipart/form-data" id="decodeForm">
@@ -122,6 +159,7 @@
                 <a href="idxencode.php" class="btn btn-success">Encode</a>
             </div>
         </div>
+        </div></div>
 
         <div class="content-container">
             <?php

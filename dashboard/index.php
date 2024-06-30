@@ -52,7 +52,7 @@
 
   <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar scroll</a>
+      <a class="navbar-brand" href="#">Eka Novitasari</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -61,29 +61,28 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="index.php">Home</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="idxencode.php">Encode</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="idxdecode.php">Decode</a>
+          </li>
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="index.php" role="button" data-bs-toggle="dropdown" aria-expanded="true">
               Steganografi LSB
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="idxencode.php">Encode</a></li>
-              <li><a class="dropdown-item" href="idxencode.php">Decode</a></li>
+              <li><a class="dropdown-item" href="idxdecode.php">Decode</a></li>
             </ul>
-          </li>
+          </li> -->
           <li class="nav-item ">
             <a class="nav-link active" href="history.php">History</a>
           </li>
         </ul>
-        <!-- <ul> -->
-          <!-- <li class="nav-item dropdown no-arrow"> -->
           <form class="d-flex bg-primary">
-            <!-- <a class="nav-link active" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
-              <!-- <span class="mr-2 d-none d-lg-inline text-gray-600 small">User</span> -->
               <img class="img-profile rounded-circle" src="img/undraw_profile.svg"/>
-            <!-- </a> -->
           </form>
-          <!-- </li> -->
-        <!-- </ul> -->
       </div>
     </div>
   </nav>
