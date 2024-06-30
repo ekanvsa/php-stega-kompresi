@@ -41,11 +41,23 @@ function messageToBinary($message) {
     return $binaryMessage;
 }
 
+function generateRandomNumber($length = 6) {
+    $characters = '0123456789';
+    $charactersLength = strlen($characters);
+    $randomNumber = '';
+
+    for ($i = 0; $i < $length; $i++) {
+        $randomNumber .= $characters[rand(0, $charactersLength - 1)];
+    }
+
+    return $randomNumber;
+}
+
 function embedLSB($imagePath, $message) {
     $image = imagecreatefrompng($imagePath);
 
     if (!$image) {
-        die("Gagal membuka gambar.");
+        return ["status" => "error", "message" => "Gagal membuka gambar."];
     }
 
     $message .= chr(0);
@@ -84,16 +96,19 @@ function embedLSB($imagePath, $message) {
         }
     }
 
-    $outputImagePath = 'uploads/hasil.png';
+    $randomNumber = generateRandomNumber();
+    $filename = 'hasil' . $randomNumber . '.png';
+    $outputImagePath = 'hasil/'. $filename;
     imagepng($image, $outputImagePath);
     imagedestroy($image);
-
-    return ["status" => "success", "imagePath" => $outputImagePath, "steps" => $steps];
+    
+    return ["status" => "success", "imagePath" => $outputImagePath, "steps" => $steps, "filename" => $filename];
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name'])) {
     $tempName = $_FILES['image']['tmp_name'];
-    $filename = $_FILES['image']['name'];
+    $randomDigit = generateRandomNumber();
+    $filename = $randomDigit . $_FILES['image']['name'];
     $imagePath = 'uploads/' . basename($filename);
     move_uploaded_file($tempName, $imagePath);
 
@@ -104,18 +119,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name']))
         $length = strlen($message);
         $stmt = $conn->prepare("INSERT INTO message (content, length) VALUES (?, ?)");
         if ($stmt === false) {
-            die("Error: " . $conn->error);
+            die(json_encode(["status" => "error", "message" => "Error: " . $conn->error]));
         }
         $stmt->bind_param("si", $message, $length);
 
         if ($stmt->execute()) {
             $messageId = mysqli_insert_id($conn);
 
-            $stmt2 = $conn->prepare("INSERT INTO image (fileName, messageId) VALUES (?, ?)");
+            $stmt2 = $conn->prepare("INSERT INTO image (fileName, messageId, filenameDecode) VALUES (?, ?, ?)");
             if ($stmt2 === false) {
-                die("Error: " . $conn->error);
+                die(json_encode(["status" => "error", "message" => "Error: " . $conn->error]));
             }
-            $stmt2->bind_param("si", $filename, $messageId);
+            $stmt2->bind_param("sis", $filename, $messageId, $embedResult['filename']);
 
             if ($stmt2->execute()) {
                 echo json_encode([
