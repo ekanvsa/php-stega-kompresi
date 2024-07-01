@@ -1,10 +1,17 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+if (!isset($_SESSION['userId'])) {
+    header("Location: ../index.php");
     exit();
 }
 $username = $_SESSION['username'];
+
+// Proses logout
+if (isset($_POST['logout'])) {
+    session_destroy(); // Hapus semua data sesi
+    header("Location: ../index.php"); // Redirect ke halaman login setelah logout
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -96,13 +103,11 @@ $username = $_SESSION['username'];
             <a class="nav-link active" href="history.php">History</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
-        </form>
       </div>
     </div>
   </nav>
 
+  
   <div class="container">
     <div class="d-flex my-3 py-1 justify-content-center">
       <div class="card" style="width: 500px;">
@@ -111,6 +116,11 @@ $username = $_SESSION['username'];
         </div>
         <div class="d-flex justify-content-center">
           <h1><?php echo htmlspecialchars($username); ?></h1>
+        </div>
+        <div class="d-flex justify-content-center mt-2 mb-5">
+          <form method="post" action="">
+            <button type="submit" name="logout" class="btn btn-danger">Logout</button>
+          </form>
         </div>
       </div>
     </div>

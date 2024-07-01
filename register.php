@@ -18,7 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("sss", $email, $username, $hashed_password);
 
     if ($stmt->execute()) {
-        header("Location: dashboard\index.php");
+        // $_SESSION['userId'] = $id;
+        // $_SESSION['username'] = $username;
+        header("Location: index.php");
     } else {
         echo "Error: " . $stmt->error;
     }
