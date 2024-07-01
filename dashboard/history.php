@@ -163,7 +163,7 @@ $id = $_SESSION['userId'];
           $start = ($page - 1) * $limit;
 
           // Query to get the total number of records
-          $sql = "SELECT COUNT(*) AS total FROM image WHERE id_user = ?";
+          $sql = "SELECT COUNT(*) AS total FROM image WHERE userId = ?";
           if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("i", $id);
             $stmt->execute();
@@ -180,7 +180,7 @@ $id = $_SESSION['userId'];
           $total_pages = ceil($total_records / $limit);
 
           // Query to get data from image table with limit and offset
-          $sql = "SELECT fileName, fileNameDecode, createdAt FROM image WHERE id_user = ? LIMIT ?, ?";
+          $sql = "SELECT fileName, fileNameDecode, createdAt FROM image WHERE userId = ? LIMIT ?, ?";
           if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("iii", $id, $start, $limit);
             $stmt->execute();

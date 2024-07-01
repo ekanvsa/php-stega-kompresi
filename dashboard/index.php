@@ -109,12 +109,11 @@ if (isset($_POST['logout'])) {
     </div>
   </nav>
 
-
   <div class="container">
     <div class="d-flex my-3 py-1 justify-content-center">
       <div class="card" style="width: 500px;">
         <div class="d-flex justify-content-center mt-2">
-          <img class="img-profile rounded-circle" src="img/undraw_profile.svg" style="width: 300px; width: 300px;" />
+          <img class="img-profile rounded-circle" src="img/undraw_profile.svg" style="width: 300px; height: 300px;" />
         </div>
         <div class="d-flex justify-content-center">
           <h1><?php echo htmlspecialchars($username); ?></h1>
@@ -125,8 +124,17 @@ if (isset($_POST['logout'])) {
           </form>
         </div>
       </div>
+      <div class="card ms-3" style="width: 500px;">
+        <div class="card-body">
+          <h5 class="card-title"><b>Selamat datang di web STEGA LSB!</b></h5>
+          <p class="card-text" style="text-align:justify;"> Silahkan pilih menu yang anda inginkan:</p>
+          <p class="card-text" style="text-align:justify;"> 1. Jika anda ingin menyisipkan informasi kepemilikan anda, anda dapat memilih menu Encode di bagian Steganografi LSB.</p>
+          <p class="card-text" style="text-align:justify;"> 2. Jika anda ingin mengeluarkan informasi yang telah anda sisipkan, anda dapat memilih menu Decode untuk mengekstraknya.</p>
+        </div>
+      </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <div class="footer">
     <p>Copyright &copy; Eka Novita Sari 2024.</p>

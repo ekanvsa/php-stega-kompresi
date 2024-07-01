@@ -132,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name']))
         if ($stmt->execute()) {
             $messageId = mysqli_insert_id($conn);
 
-            $stmt2 = $conn->prepare("INSERT INTO image (fileName, messageId, filenameDecode, id_user) VALUES (?, ?, ?, ?)");
+            $stmt2 = $conn->prepare("INSERT INTO image (fileName, messageId, filenameDecode, userId) VALUES (?, ?, ?, ?)");
             if ($stmt2 === false) {
                 die(json_encode(["status" => "error", "message" => "Error: " . $conn->error]));
             }
