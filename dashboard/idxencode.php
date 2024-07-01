@@ -66,6 +66,7 @@ $id = $_SESSION['userId'];
     }
 
     .step {
+      max-width: fit-content;
       margin-bottom: 20px;
       padding: 10px;
       background-color: #f9f9f9;
@@ -177,7 +178,7 @@ $id = $_SESSION['userId'];
             let res = JSON.parse(response);
             if (res.status === 'success') {
               $('#result').html(`
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success"  role="alert">
                   ${res.message}
                   <br>
                   <img src="${res.imagePath}" class="img-fluid mt-3 encoded-image" alt="Encoded Image">
@@ -189,11 +190,13 @@ $id = $_SESSION['userId'];
               res.steps.forEach((step, index) => {
                 stepsHTML += `
                   <div class="step">
+                  <div class="card">
                     <h5>Step ${index + 1}</h5>
                     <p>Pixel (${step.pixel.x}, ${step.pixel.y})</p>
                     <p>Colors: R: ${step.colors.red}, G: ${step.colors.green}, B: ${step.colors.blue}</p>
-                    <p>Binary message: ${step.binary_message}</p>
+                    <p >Binary message: ${step.binary_message}</p>
                     <p>Index: ${step.index}</p>
+                  </div>
                   </div>
                 `;
               });

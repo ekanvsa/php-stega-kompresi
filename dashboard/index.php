@@ -1,21 +1,22 @@
 <?php
 session_start();
 if (!isset($_SESSION['userId'])) {
-    header("Location: ../index.php");
-    exit();
+  header("Location: ../index.php");
+  exit();
 }
 $username = $_SESSION['username'];
 
 // Proses logout
 if (isset($_POST['logout'])) {
-    session_destroy(); // Hapus semua data sesi
-    header("Location: ../index.php"); // Redirect ke halaman login setelah logout
-    exit();
+  session_destroy(); // Hapus semua data sesi
+  header("Location: ../index.php"); // Redirect ke halaman login setelah logout
+  exit();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,6 +72,7 @@ if (isset($_POST['logout'])) {
     }
   </style>
 </head>
+
 <body>
   <style>
     body {
@@ -107,7 +109,7 @@ if (isset($_POST['logout'])) {
     </div>
   </nav>
 
-  
+
   <div class="container">
     <div class="d-flex my-3 py-1 justify-content-center">
       <div class="card" style="width: 500px;">
@@ -130,4 +132,5 @@ if (isset($_POST['logout'])) {
     <p>Copyright &copy; Eka Novita Sari 2024.</p>
   </div>
 </body>
+
 </html>

@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['userId'])) {
-    header("Location: ../login.php");
-    exit();
+  header("Location: ../login.php");
+  exit();
 }
-$id = $_SESSION['user_id'];
+$id = $_SESSION['userId'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -165,15 +165,15 @@ $id = $_SESSION['user_id'];
           // Query to get the total number of records
           $sql = "SELECT COUNT(*) AS total FROM image WHERE id_user = ?";
           if ($stmt = $conn->prepare($sql)) {
-              $stmt->bind_param("i", $id);
-              $stmt->execute();
-              $result = $stmt->get_result();
-              $row = $result->fetch_assoc();
-              $total_records = $row['total'];
-              $stmt->close();
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $total_records = $row['total'];
+            $stmt->close();
           } else {
-              echo "Error: " . $conn->error;
-              exit();
+            echo "Error: " . $conn->error;
+            exit();
           }
 
           // Calculate the total number of pages
@@ -182,29 +182,29 @@ $id = $_SESSION['user_id'];
           // Query to get data from image table with limit and offset
           $sql = "SELECT fileName, fileNameDecode, createdAt FROM image WHERE id_user = ? LIMIT ?, ?";
           if ($stmt = $conn->prepare($sql)) {
-              $stmt->bind_param("iii", $id, $start, $limit);
-              $stmt->execute();
-              $result = $stmt->get_result();
+            $stmt->bind_param("iii", $id, $start, $limit);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-              if ($result->num_rows > 0) {
-                  $no = $start + 1;
-                  // Output data of each row
-                  while ($row = $result->fetch_assoc()) {
-                      echo "<tr>";
-                      echo "<th scope='row' class='text-center'>" . $no++ . "</th>";
-                      echo "<td>" . $row["fileName"] . "</td>";
-                      echo "<td class='text-center'>" . $row["fileNameDecode"] . "</td>";
-                      echo "<td class='text-center'>" . $row["createdAt"] . "</td>";
-                      echo "</tr>";
-                  }
-              } else {
-                  echo "<tr><td colspan='4' class='text-center'>No data found</td></tr>";
+            if ($result->num_rows > 0) {
+              $no = $start + 1;
+              // Output data of each row
+              while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<th scope='row' class='text-center'>" . $no++ . "</th>";
+                echo "<td>" . $row["fileName"] . "</td>";
+                echo "<td class='text-center'>" . $row["fileNameDecode"] . "</td>";
+                echo "<td class='text-center'>" . $row["createdAt"] . "</td>";
+                echo "</tr>";
               }
+            } else {
+              echo "<tr><td colspan='4' class='text-center'>No data found</td></tr>";
+            }
 
-              $stmt->close();
+            $stmt->close();
           } else {
-              echo "Error: " . $conn->error;
-              exit();
+            echo "Error: " . $conn->error;
+            exit();
           }
 
           $conn->close();
@@ -213,17 +213,17 @@ $id = $_SESSION['user_id'];
       </table>
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-          <?php if($page > 1): ?>
+          <?php if ($page > 1) : ?>
             <li class="page-item">
               <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
           <?php endif; ?>
-          <?php for($i = 1; $i <= $total_pages; $i++): ?>
-            <li class="page-item <?php if($i == $page) echo 'active'; ?>"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+          <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+            <li class="page-item <?php if ($i == $page) echo 'active'; ?>"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
           <?php endfor; ?>
-          <?php if($page < $total_pages): ?>
+          <?php if ($page < $total_pages) : ?>
             <li class="page-item">
               <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>

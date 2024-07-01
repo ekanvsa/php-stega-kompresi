@@ -24,7 +24,6 @@
             color: black;
             text-align: center;
             padding: 10px 0;
-            background-color: #f1f1f1; /* Tambahkan warna latar belakang yang sesuai */
         }
     </style>
     <div class="container">
