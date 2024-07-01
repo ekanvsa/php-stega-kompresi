@@ -71,18 +71,37 @@
 
     .encoded-image {
       max-width: 100px;
-      /* Set the max width for the encoded image */
       height: auto;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      color: black;
+      text-align: center;
+      padding: 10px 0;
     }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <style>
+    body {
+      background-image: url('img/bg2.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  </style>
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Eka Novitasari</a>
+      <a class="navbar-brand" href="index.php">Eka Novita Sari</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -91,28 +110,22 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="index.php">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="idxencode.php">Encode</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="idxdecode.php">Decode</a>
-          </li>
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="index.php" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownToggle">
               Steganografi LSB
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" id="dropdownMenu">
               <li><a class="dropdown-item" href="idxencode.php">Encode</a></li>
               <li><a class="dropdown-item" href="idxdecode.php">Decode</a></li>
             </ul>
-          </li> -->
+          </li>
           <li class="nav-item ">
             <a class="nav-link active" href="history.php">History</a>
           </li>
         </ul>
-          <form class="d-flex bg-primary">
-              <img class="img-profile rounded-circle" src="img/undraw_profile.svg"/>
-          </form>
+        <form class="d-flex bg-primary">
+          <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+        </form>
       </div>
     </div>
   </nav>
@@ -131,10 +144,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Encode</button>
       </form>
-      <div class="mt-3 text-center">
-        <a href="index.php" class="btn btn-primary">Home</a>
-        <a href="idxdecode.php" class="btn btn-success">Decode</a>
-      </div>
     </div>
     <div>
       <div id="result" class="mt-3"></div>
@@ -190,7 +199,21 @@
         });
       });
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const dropdownToggle = document.getElementById('dropdownToggle');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+
+      dropdownToggle.addEventListener('click', function(event) {
+        // Toggle the dropdown menu
+        const isActive = dropdownMenu.classList.toggle('show');
+        dropdownToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+      });
+    });
   </script>
+  <div class="footer">
+    <p>Copyright &copy; Eka Novita Sari 2024.</p>
+  </div>
 </body>
 
 </html>

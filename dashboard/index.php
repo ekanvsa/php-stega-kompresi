@@ -45,14 +45,30 @@
       background-color: #0056b3;
       border-color: #0056b3;
     }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      color: black;
+      text-align: center;
+      padding: 10px 0;
+    }
   </style>
 </head>
 
 <body>
-
+  <style>
+    body {
+      background-image: url('img/bg2.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  </style>
   <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Eka Novitasari</a>
+      <a class="navbar-brand" href="index.php">Eka Novita Sari</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -61,13 +77,13 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="index.php">Home</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="idxencode.php">Encode</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="idxdecode.php">Decode</a>
-          </li>
-          <!-- <li class="nav-item dropdown">
+          </li> -->
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="index.php" role="button" data-bs-toggle="dropdown" aria-expanded="true">
               Steganografi LSB
             </a>
@@ -75,14 +91,14 @@
               <li><a class="dropdown-item" href="idxencode.php">Encode</a></li>
               <li><a class="dropdown-item" href="idxdecode.php">Decode</a></li>
             </ul>
-          </li> -->
+          </li>
           <li class="nav-item ">
             <a class="nav-link active" href="history.php">History</a>
           </li>
         </ul>
-          <form class="d-flex bg-primary">
-              <img class="img-profile rounded-circle" src="img/undraw_profile.svg"/>
-          </form>
+        <form class="d-flex bg-primary">
+          <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+        </form>
       </div>
     </div>
   </nav>
@@ -124,6 +140,9 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <div class="footer">
+    <p>Copyright &copy; Eka Novita Sari 2024.</p>
+  </div>
 </body>
 
 </html>
