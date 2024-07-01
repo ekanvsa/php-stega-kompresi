@@ -3,6 +3,7 @@ include('db.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm-password'];
 
@@ -13,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
-    $stmt->bind_param("ss", $email, $hashed_password);
+    $stmt = $conn->prepare("INSERT INTO user (email, username, password) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $email, $username, $hashed_password);
 
     if ($stmt->execute()) {
-        header("Location: dashboard\index.html");
+        header("Location: dashboard\index.php");
     } else {
         echo "Error: " . $stmt->error;
     }

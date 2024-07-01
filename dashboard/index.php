@@ -1,10 +1,18 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+$username = $_SESSION['username'];
+?>
+
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Pesan</title>
+  <title>Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <style>
     body {
@@ -22,7 +30,6 @@
       background-color: #fff;
       margin: 20px auto;
       max-width: 900px;
-      /* Lebar maksimum */
       color: #333;
     }
 
@@ -57,7 +64,6 @@
     }
   </style>
 </head>
-
 <body>
   <style>
     body {
@@ -68,7 +74,7 @@
   </style>
   <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="index.php">Eka Novita Sari</a>
+      <a class="navbar-brand" href="index.php">STEGA LSB</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -77,12 +83,6 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="index.php">Home</a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="idxencode.php">Encode</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="idxdecode.php">Decode</a>
-          </li> -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="index.php" role="button" data-bs-toggle="dropdown" aria-expanded="true">
               Steganografi LSB
@@ -92,11 +92,11 @@
               <li><a class="dropdown-item" href="idxdecode.php">Decode</a></li>
             </ul>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item">
             <a class="nav-link active" href="history.php">History</a>
           </li>
         </ul>
-        <form class="d-flex bg-primary">
+        <form class="d-flex">
           <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
         </form>
       </div>
@@ -104,45 +104,20 @@
   </nav>
 
   <div class="container">
-    <div class="form-container">
-      <h1 class="mb-4">Steganografi LSB</h1>
-      <p class="lead">Silakan pilih operasi yang ingin Anda lakukan:</p>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Encode Gambar</h5>
-              <p class="card-text">Encode pesan rahasia ke dalam gambar.</p>
-              <a href="idxencode.php" class="btn btn-primary">Encode</a>
-            </div>
-          </div>
+    <div class="d-flex my-3 py-1 justify-content-center">
+      <div class="card" style="width: 500px;">
+        <div class="d-flex justify-content-center mt-2">
+          <img class="img-profile rounded-circle" src="img/undraw_profile.svg" style="width: 300px; width: 300px;" />
         </div>
-        <div class="col-md-6">
-          <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Decode Gambar</h5>
-              <p class="card-text">Decode pesan rahasia dari gambar.</p>
-              <a href="idxdecode.php" class="btn btn-primary">Decode</a>
-            </div>
-          </div>
+        <div class="d-flex justify-content-center">
+          <h1><?php echo htmlspecialchars($username); ?></h1>
         </div>
-        <!-- <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Kompresi Gambar</h5>
-                            <p class="card-text">Kompresi gambar untuk mengurangi ukuran file.</p>
-                            <a href="idxkompresi.php" class="btn btn-primary">Kompresi</a>
-                        </div>
-                    </div>
-                </div> -->
       </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <div class="footer">
     <p>Copyright &copy; Eka Novita Sari 2024.</p>
   </div>
 </body>
-
 </html>

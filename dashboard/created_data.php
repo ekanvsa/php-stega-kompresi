@@ -1,5 +1,11 @@
 <?php
 include('../db.php');
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+$id = $_SESSION['userId'];
 
 ini_set('output_buffering', 'off');
 ini_set('zlib.output_compression', false);
@@ -126,11 +132,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['image']['tmp_name']))
         if ($stmt->execute()) {
             $messageId = mysqli_insert_id($conn);
 
-            $stmt2 = $conn->prepare("INSERT INTO image (fileName, messageId, filenameDecode) VALUES (?, ?, ?)");
+            $stmt2 = $conn->prepare("INSERT INTO image (fileName, messageId, filenameDecode, id_user) VALUES (?, ?, ?, ?)");
             if ($stmt2 === false) {
                 die(json_encode(["status" => "error", "message" => "Error: " . $conn->error]));
             }
-            $stmt2->bind_param("sis", $filename, $messageId, $embedResult['filename']);
+            $stmt2->bind_param("siss", $filename, $messageId, $embedResult['filename'], $id);
 
             if ($stmt2->execute()) {
                 echo json_encode([

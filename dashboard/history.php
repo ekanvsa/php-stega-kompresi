@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+$id = $_SESSION['user_id'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -130,9 +138,102 @@
       </div>
     </div>
   </nav>
+  <div class="d-flex my-3 py-1 justify-content-center">
+    <div class="card" style="width: 1000px;">
+      <table class="table">
+        <thead>
+          <tr class=" text-center">
+            <th scope="col">No</th>
+            <th scope="col">File Encode</th>
+            <th scope="col">File Hasil Encode</th>
+            <th scope="col">Tanggal Encode</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <?php
+          include('../db.php');
 
-  <h1>History</h1>
+          // Set the number of records to display per page
+          $limit = 10;
 
+          // Get the current page number from the URL, default to page 1 if not set
+          $page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+          // Calculate the starting record for the current page
+          $start = ($page - 1) * $limit;
+
+          // Query to get the total number of records
+          $sql = "SELECT COUNT(*) AS total FROM image WHERE id_user = ?";
+          if ($stmt = $conn->prepare($sql)) {
+              $stmt->bind_param("i", $id);
+              $stmt->execute();
+              $result = $stmt->get_result();
+              $row = $result->fetch_assoc();
+              $total_records = $row['total'];
+              $stmt->close();
+          } else {
+              echo "Error: " . $conn->error;
+              exit();
+          }
+
+          // Calculate the total number of pages
+          $total_pages = ceil($total_records / $limit);
+
+          // Query to get data from image table with limit and offset
+          $sql = "SELECT fileName, fileNameDecode, createdAt FROM image WHERE id_user = ? LIMIT ?, ?";
+          if ($stmt = $conn->prepare($sql)) {
+              $stmt->bind_param("iii", $id, $start, $limit);
+              $stmt->execute();
+              $result = $stmt->get_result();
+
+              if ($result->num_rows > 0) {
+                  $no = $start + 1;
+                  // Output data of each row
+                  while ($row = $result->fetch_assoc()) {
+                      echo "<tr>";
+                      echo "<th scope='row' class='text-center'>" . $no++ . "</th>";
+                      echo "<td>" . $row["fileName"] . "</td>";
+                      echo "<td class='text-center'>" . $row["fileNameDecode"] . "</td>";
+                      echo "<td class='text-center'>" . $row["createdAt"] . "</td>";
+                      echo "</tr>";
+                  }
+              } else {
+                  echo "<tr><td colspan='4' class='text-center'>No data found</td></tr>";
+              }
+
+              $stmt->close();
+          } else {
+              echo "Error: " . $conn->error;
+              exit();
+          }
+
+          $conn->close();
+          ?>
+        </tbody>
+      </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <?php if($page > 1): ?>
+            <li class="page-item">
+              <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          <?php endif; ?>
+          <?php for($i = 1; $i <= $total_pages; $i++): ?>
+            <li class="page-item <?php if($i == $page) echo 'active'; ?>"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+          <?php endfor; ?>
+          <?php if($page < $total_pages): ?>
+            <li class="page-item">
+              <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          <?php endif; ?>
+        </ul>
+      </nav>
+    </div>
+  </div>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const dropdownToggle = document.getElementById('dropdownToggle');
