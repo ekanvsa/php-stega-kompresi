@@ -21,7 +21,9 @@ $id = $_SESSION['userId'];
       padding: 0;
       font-family: 'Georgia', serif;
       background-color: #f4f4f4;
-      min-height: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .form-container {
@@ -89,7 +91,8 @@ $id = $_SESSION['userId'];
     }
 
     .footer {
-      position: fixed;
+      position: relative;
+      margin-top: auto;
       left: 0;
       bottom: 0;
       width: 100%;
@@ -104,7 +107,7 @@ $id = $_SESSION['userId'];
 <body>
   <style>
     body {
-      background-image: url('img/bg2.jpg');
+      background-image: url('img/bg2e.jpg');
       background-size: cover;
       background-repeat: no-repeat;
     }

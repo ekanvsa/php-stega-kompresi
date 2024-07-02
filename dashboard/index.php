@@ -76,7 +76,7 @@ if (isset($_POST['logout'])) {
 <body>
   <style>
     body {
-      background-image: url('img/bg2.jpg');
+      background-image: url('img/bg2e.jpg');
       background-size: cover;
       background-repeat: no-repeat;
     }

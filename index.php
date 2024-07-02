@@ -11,7 +11,7 @@
 <body>
     <style>
         body {
-            background-image: url('dashboard/img/bg2.jpg');
+            background-image: url('dashboard/img/bg2e.jpg');
             background-size: cover;
             background-repeat: no-repeat;
         }

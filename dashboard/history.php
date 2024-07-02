@@ -103,7 +103,7 @@ $id = $_SESSION['userId'];
 <body>
   <style>
     body {
-      background-image: url('img/bg2.jpg');
+      background-image: url('img/bg2e.jpg');
       background-size: cover;
       background-repeat: no-repeat;
     }

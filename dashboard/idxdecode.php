@@ -12,7 +12,9 @@
             padding: 0;
             font-family: 'Georgia', serif;
             background-color: #f4f4f4;
-            min-height: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .form-container {
@@ -74,7 +76,8 @@
         }
 
         .footer {
-            position: fixed;
+            position: relative;
+            margin-top: auto;
             left: 0;
             bottom: 0;
             width: 100%;
@@ -88,7 +91,8 @@
         }
 
         .result-image {
-            max-width: 150px; /* Ukuran gambar dikurangi menjadi maksimum lebar 300px */
+            max-width: 150px;
+            /* Ukuran gambar dikurangi menjadi maksimum lebar 300px */
             height: auto;
             margin-top: 20px;
         }
@@ -99,7 +103,7 @@
 <body>
     <style>
         body {
-            background-image: url('img/bg2.jpg');
+            background-image: url('img/bg2e.jpg');
             background-size: cover;
             background-repeat: no-repeat;
         }
