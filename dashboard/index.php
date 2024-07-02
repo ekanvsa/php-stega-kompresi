@@ -126,7 +126,7 @@ if (isset($_POST['logout'])) {
       </div>
       <div class="card ms-3" style="width: 500px;">
         <div class="card-body">
-          <h5 class="card-title"><b>Selamat datang di web STEGA LSB!</b></h5>
+          <h5 class="card-title"><b>Selamat Datang di Web STEGA LSB!</b></h5><br>
           <p class="card-text" style="text-align:justify;"> Silahkan pilih menu yang anda inginkan:</p>
           <p class="card-text" style="text-align:justify;"> 1. Jika anda ingin menyisipkan informasi kepemilikan anda, anda dapat memilih menu Encode di bagian Steganografi LSB.</p>
           <p class="card-text" style="text-align:justify;"> 2. Jika anda ingin mengeluarkan informasi yang telah anda sisipkan, anda dapat memilih menu Decode untuk mengekstraknya.</p>
