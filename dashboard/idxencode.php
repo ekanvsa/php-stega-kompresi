@@ -1,9 +1,14 @@
 <?php
+// Memulai sesi PHP
 session_start();
+
+// Memeriksa apakah user sudah login, jika tidak, diarahkan ke halaman login
 if (!isset($_SESSION['userId'])) {
   header("Location: ../login.php");
   exit();
 }
+
+// Menyimpan user ID dari sesi ke variabel $id
 $id = $_SESSION['userId'];
 ?>
 
@@ -11,11 +16,14 @@ $id = $_SESSION['userId'];
 <html lang="id">
 
 <head>
+  <!-- Menetapkan karakter encoding dan pengaturan tampilan -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Encode Gambar</title>
+  <!-- Menghubungkan ke Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <style>
+    /* CSS untuk styling halaman */
     body {
       margin: 0;
       padding: 0;
@@ -101,17 +109,20 @@ $id = $_SESSION['userId'];
       padding: 10px 0;
     }
   </style>
+  <!-- Menghubungkan ke jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
   <style>
+    /* CSS tambahan untuk background */
     body {
       background-image: url('img/bg2e.jpg');
       background-size: cover;
       background-repeat: no-repeat;
     }
   </style>
+  <!-- Navbar dengan Bootstrap -->
   <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.php">STEGA LSB</a>
@@ -132,7 +143,7 @@ $id = $_SESSION['userId'];
               <li><a class="dropdown-item" href="idxdecode.php">Decode</a></li>
             </ul>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item">
             <a class="nav-link active" href="history.php">History</a>
           </li>
         </ul>
@@ -143,9 +154,11 @@ $id = $_SESSION['userId'];
     </div>
   </nav>
 
+  <!-- Kontainer utama -->
   <div class="container horizontal-layout">
     <div class="form-container">
       <h1 class="mb-4">Encode Gambar</h1>
+      <!-- Form untuk upload gambar dan pesan -->
       <form id="encodeForm" enctype="multipart/form-data" method="post" action="created_data.php">
         <div class="mb-3">
           <label for="image" class="form-label">Pilih Gambar:</label>
@@ -166,11 +179,13 @@ $id = $_SESSION['userId'];
 
   <script>
     $(document).ready(function() {
+      // Menggunakan jQuery untuk menangani pengiriman form secara asinkron
       $('#encodeForm').on('submit', function(e) {
         e.preventDefault();
 
         let formData = new FormData(this);
 
+        // Mengirim data form ke server menggunakan AJAX
         $.ajax({
           url: $(this).attr('action'),
           type: 'POST',
@@ -190,6 +205,7 @@ $id = $_SESSION['userId'];
                 </div>
               `);
               let stepsHTML = '';
+              // Menampilkan langkah-langkah penyembunyian pesan dalam gambar
               res.steps.forEach((step, index) => {
                 stepsHTML += `
                   <div class="step">
@@ -197,7 +213,7 @@ $id = $_SESSION['userId'];
                     <h5>Step ${index + 1}</h5>
                     <p>Pixel (${step.pixel.x}, ${step.pixel.y})</p>
                     <p>Colors: R: ${step.colors.red}, G: ${step.colors.green}, B: ${step.colors.blue}</p>
-                    <p >Binary message: ${step.binary_message}</p>
+                    <p>Binary message: ${step.binary_message}</p>
                     <p>Index: ${step.index}</p>
                   </div>
                   </div>
@@ -215,6 +231,7 @@ $id = $_SESSION['userId'];
       });
     });
 
+    // Menggunakan JavaScript untuk menangani dropdown menu
     document.addEventListener('DOMContentLoaded', function() {
       const dropdownToggle = document.getElementById('dropdownToggle');
       const dropdownMenu = document.getElementById('dropdownMenu');
@@ -226,6 +243,7 @@ $id = $_SESSION['userId'];
       });
     });
   </script>
+  <!-- Footer -->
   <div class="footer">
     <p>Copyright &copy; Eka Novita Sari 2024.</p>
   </div>

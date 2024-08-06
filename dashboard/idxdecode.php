@@ -2,10 +2,13 @@
 <html lang="id">
 
 <head>
+    <!-- Meta tag untuk karakter encoding dan pengaturan tampilan -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decode Pesan Rahasia dari Gambar</title>
+    <!-- Menghubungkan Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- CSS untuk styling halaman -->
     <style>
         body {
             margin: 0;
@@ -97,10 +100,12 @@
             margin-top: 20px;
         }
     </style>
+    <!-- Menghubungkan jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
+    <!-- CSS tambahan untuk background -->
     <style>
         body {
             background-image: url('img/bg2e.jpg');
@@ -108,6 +113,7 @@
             background-repeat: no-repeat;
         }
     </style>
+    <!-- Navbar dengan Bootstrap -->
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">STEGA LSB</a>
@@ -135,10 +141,12 @@
             </div>
         </div>
     </nav>
+    <!-- Kontainer utama -->
     <div class="container horizontal-layout">
         <div class="form-container">
             <h1 class="mb-4">Decode Gambar</h1>
             <div class="form-container">
+                <!-- Form untuk upload gambar -->
                 <form action="" method="post" enctype="multipart/form-data" id="decodeForm">
                     <div class="mb-3">
                         <label for="image" class="form-label">Pilih Gambar:</label>
@@ -231,8 +239,10 @@
         </div>
     </div>
 
+    <!-- Menghubungkan Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+    <!-- Footer -->
     <div class="footer">
         <p>Copyright &copy; Eka Novita Sari 2024.</p>
     </div>

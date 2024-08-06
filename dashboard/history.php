@@ -1,10 +1,10 @@
 <?php
-session_start();
-if (!isset($_SESSION['userId'])) {
-  header("Location: ../login.php");
-  exit();
+session_start(); // Memulai sesi pengguna
+if (!isset($_SESSION['userId'])) { // Memeriksa apakah pengguna sudah login
+    header("Location: ../login.php"); // Jika tidak, arahkan ke halaman login
+    exit(); // Hentikan eksekusi script lebih lanjut
 }
-$id = $_SESSION['userId'];
+$id = $_SESSION['userId']; // Ambil ID pengguna dari sesi
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -151,35 +151,35 @@ $id = $_SESSION['userId'];
         </thead>
         <tbody class="table-group-divider">
           <?php
-          include('../db.php');
+          include('../db.php'); // Menghubungkan ke database
 
-          // Set the number of records to display per page
+          // Set jumlah catatan yang ditampilkan per halaman
           $limit = 10;
 
-          // Get the current page number from the URL, default to page 1 if not set
+          // Mendapatkan nomor halaman saat ini dari URL, default ke halaman 1 jika tidak diset
           $page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-          // Calculate the starting record for the current page
+          // Menghitung catatan yang ditampilkan pada halaman saat ini
           $start = ($page - 1) * $limit;
 
-          // Query to get the total number of records
+          // Kuery untuk mendapatkan jumlah total catatan
           $sql = "SELECT COUNT(*) AS total FROM image WHERE userId = ?";
           if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
             $row = $result->fetch_assoc();
-            $total_records = $row['total'];
+            $total_records = $row['total']; // Mendapatkan total catatan
             $stmt->close();
           } else {
-            echo "Error: " . $conn->error;
+            echo "Error: " . $conn->error; // Menampilkan pesan error jika kuery gagal
             exit();
           }
 
-          // Calculate the total number of pages
+          // Menghitung total halaman yang diperlukan
           $total_pages = ceil($total_records / $limit);
 
-          // Query to get data from image table with limit and offset
+          // Kuery untuk mendapatkan data dari tabel gambar dengan limit dan offset
           $sql = "SELECT fileName, fileNameDecode, createdAt FROM image WHERE userId = ? LIMIT ?, ?";
           if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("iii", $id, $start, $limit);
@@ -187,8 +187,8 @@ $id = $_SESSION['userId'];
             $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
-              $no = $start + 1;
-              // Output data of each row
+              $no = $start + 1; // Nomor urut mulai dari angka yang sesuai
+              // Mengeluarkan data dari setiap baris
               while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<th scope='row' class='text-center'>" . $no++ . "</th>";
@@ -198,16 +198,16 @@ $id = $_SESSION['userId'];
                 echo "</tr>";
               }
             } else {
-              echo "<tr><td colspan='4' class='text-center'>No data found</td></tr>";
+              echo "<tr><td colspan='4' class='text-center'>No data found</td></tr>"; // Menampilkan pesan jika tidak ada data
             }
 
             $stmt->close();
           } else {
-            echo "Error: " . $conn->error;
+            echo "Error: " . $conn->error; // Menampilkan pesan error jika kuery gagal
             exit();
           }
 
-          $conn->close();
+          $conn->close(); // Menutup koneksi database
           ?>
         </tbody>
       </table>
