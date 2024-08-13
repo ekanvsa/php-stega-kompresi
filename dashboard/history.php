@@ -144,8 +144,8 @@ $id = $_SESSION['userId']; // Ambil ID pengguna dari sesi
         <thead>
           <tr class=" text-center">
             <th scope="col">No</th>
-            <th scope="col">File Encode</th>
-            <th scope="col">File Hasil Encode</th>
+            <th scope="col">File Asli</th>
+            <th scope="col">File Hasil</th>
             <th scope="col">Tanggal Encode</th>
           </tr>
         </thead>
@@ -180,7 +180,7 @@ $id = $_SESSION['userId']; // Ambil ID pengguna dari sesi
           $total_pages = ceil($total_records / $limit);
 
           // Kuery untuk mendapatkan data dari tabel gambar dengan limit dan offset
-          $sql = "SELECT fileName, fileNameDecode, createdAt FROM image WHERE userId = ? LIMIT ?, ?";
+          $sql = "SELECT fileNameAsli, fileNameHasil, createdAt FROM image WHERE userId = ? LIMIT ?, ?";
           if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("iii", $id, $start, $limit);
             $stmt->execute();
@@ -192,8 +192,8 @@ $id = $_SESSION['userId']; // Ambil ID pengguna dari sesi
               while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<th scope='row' class='text-center'>" . $no++ . "</th>";
-                echo "<td>" . $row["fileName"] . "</td>";
-                echo "<td class='text-center'>" . $row["fileNameDecode"] . "</td>";
+                echo "<td>" . $row["fileNameAsli"] . "</td>";
+                echo "<td class='text-center'>" . $row["fileNameHasil"] . "</td>";
                 echo "<td class='text-center'>" . $row["createdAt"] . "</td>";
                 echo "</tr>";
               }

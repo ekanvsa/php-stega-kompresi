@@ -185,7 +185,7 @@ $id = $_SESSION['userId'];
 
         let formData = new FormData(this);
 
-        // Mengirim data form ke server menggunakan AJAX
+        // Mengirim data form ke server menggunakan AJAX (Asynchronous JavaScript and XML)
         $.ajax({
           url: $(this).attr('action'),
           type: 'POST',
